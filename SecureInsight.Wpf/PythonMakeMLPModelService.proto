@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package PythonMakeMLPModel;
+
+service PythonMakeMLPModelService {
+    rpc Start(StartRequest) returns (stream StartResponse);
+}
+
+message StartRequest {
+    repeated string modes = 1;
+    string save_model_path = 2;
+    int32 epochs = 3;
+    int32 batch_size = 4;
+}
+
+message StartResponse {
+    bool result = 1;
+    string error_message = 2;
+    string status = 3;
+}

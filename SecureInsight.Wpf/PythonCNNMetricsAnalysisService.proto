@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package PythonCNNMetricsAnalysis;
+
+message Metrics {
+  string mode = 1;
+  float accuracy = 2;
+  float precision = 3;
+  float recall = 4;
+  float f1_score = 5;
+}
+
+service PythonCNNMetricsAnalysisService {
+    rpc Start(StartRequest) returns (stream StartResponse);
+}
+
+message StartRequest {
+    repeated string modes = 1;
+    string save_model_path = 2;
+}
+
+message StartResponse {
+    repeated Metrics result = 1;
+    string error_message = 2;
+    string status = 3;
+    float progress = 4;
+}

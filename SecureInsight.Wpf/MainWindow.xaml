@@ -1,0 +1,388 @@
+﻿<Window x:Class="SecureInsight.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:local="clr-namespace:SecureInsight.Wpf" 
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        mc:Ignorable="d"
+        Title="" WindowState="Maximized">
+
+    <Grid>
+        <TabControl>
+            <TabItem Header="Creating the Corpus">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel x:Name="CorpusStackPanel" Grid.Row="0" VerticalAlignment="Top">
+                        <Button x:Name="corpusBox" Content="Add Corpus Box" Click="AddCorpusBox_Click" Width="100" Margin="5"/>
+                    </StackPanel>
+
+                    <avalonEdit:TextEditor x:Name="textEditor" Grid.Row="1"  />
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Tokenize">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel x:Name="TokenizeStackPanel" VerticalAlignment="Top" Margin="10">
+                        <Button Content="Add Tokenize Box" Click="AddTokenizeBox_Click" Width="100" Margin="5"/>
+                    </StackPanel>
+
+                    <avalonEdit:TextEditor x:Name="TokenizeTextEditor" Grid.Row="1"  />
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Word2VecModel">
+                <StackPanel Margin="10">
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox x:Name="languageComboBox" Width="200" Height="30" Margin="10">
+                            <ComboBoxItem Content="C" />
+                            <ComboBoxItem Content="C++" />
+                            <ComboBoxItem Content="C#" />
+                            <ComboBoxItem Content="Java" />
+                            <ComboBoxItem Content="Python" />
+                            <ComboBoxItem Content="Delphi" />
+                            <ComboBoxItem Content="Pascal" />
+                            <ComboBoxItem Content="PHP" />
+                            <ComboBoxItem Content="Rust" />
+                            <ComboBoxItem Content="JavaScript" />
+                            <ComboBoxItem Content="TypeScript" />
+                        </ComboBox>
+                    </StackPanel>
+
+                    <TextBlock Text="Tokenized Data Path:" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="Word2VecTokenizedDataPathTextBox" Width="400"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="Word2VecBrowseTokenizedDataButton_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Model Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="Word2VecModelPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="Word2VecBrowseModelPathButton_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Vector Size:" Margin="0,10,0,0"/>
+                    <TextBox Name="Word2VecVectorSizeTextBox" Text="10,20"/>
+
+                    <TextBlock Text="Iterations:" Margin="0,10,0,0"/>
+                    <TextBox Name="Word2VecIterationsTextBox" Text="20,30"/>
+
+                    <TextBlock Text="Min Count:" Margin="0,10,0,0"/>
+                    <TextBox Name="Word2VecMinCountTextBox" Text="20,50"/>
+
+                    <TextBlock Text="Workers:" Margin="0,10,0,0"/>
+                    <TextBox Name="Word2VecWorkersTextBox" Text="4"/>
+
+                    <Button Name="Word2VecSaveButton" Content="Save" Margin="0,20,0,0" Click="Word2VecSaveButton_Click"/>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="LSTMModel">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Mode:" />
+                    <ListBox Name="LSTMModeListBox" SelectionMode="Multiple" Height="100" Width="200">
+                        <ListBoxItem Content="xss" />
+                        <ListBoxItem Content="remote_code_execution" />
+                        <ListBoxItem Content="command_injection" />
+                        <ListBoxItem Content="path_disclosure" />
+                        <ListBoxItem Content="xsrf" />
+                        <ListBoxItem Content="sql" />
+                        <ListBoxItem Content="open_redirect" />
+                    </ListBox>
+
+                    <TextBlock Text="Samples Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="LSTMSamplesPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="LSTMBrowseSamplesPathButton_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Save Model Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="LSTMSaveModelPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="LSTMBrowseSaveModelPathButton_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Word2Vec Model Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="LSTMModelPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="LSTMBrowseWord2VecModelPathButton_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Dropout:" Margin="0,10,0,0"/>
+                    <TextBox Name="LSTMDropoutTextBox" Text="0.2"/>
+
+                    <TextBlock Text="Neurons:" Margin="0,10,0,0"/>
+                    <TextBox Name="LSTMNeuronsTextBox" Text="100"/>
+
+                    <TextBlock Text="Epochs:" Margin="0,10,0,0"/>
+                    <TextBox Name="LSTMEpochsTextBox" Text="10"/>
+
+                    <TextBlock Text="Batch Size:" Margin="0,10,0,0"/>
+                    <TextBox Name="LSTMBatchSizeTextBox" Text="128"/>
+
+                    <Button x:Name="LSTMSaveButton" Content="Save" Margin="0,20,0,0" Click="LSTMSaveButton_Click"/>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="MLPModel">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Mode:" />
+                    <ListBox Name="MLPModeListBox" SelectionMode="Multiple" Height="200" Width="300">
+                        <ListBoxItem Content="xss" />
+                        <ListBoxItem Content="remote_code_execution" />
+                        <ListBoxItem Content="command_injection" />
+                        <ListBoxItem Content="path_disclosure" />
+                        <ListBoxItem Content="xsrf" />
+                        <ListBoxItem Content="sql" />
+                        <ListBoxItem Content="open_redirect" />
+                    </ListBox>
+
+                    <TextBlock Text="Save Model Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="MLPSaveModelPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="MLPBrowseSaveModelPathButton_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Epochs:" Margin="0,10,0,0"/>
+                    <TextBox Name="MLPEpochsTextBox" Text="10"/>
+
+                    <TextBlock Text="Batch Size:" Margin="0,10,0,0"/>
+                    <TextBox Name="MLPBatchSizeTextBox" Text="128"/>
+
+                    <Button x:Name="MLPSaveButton" Content="Save" Margin="0,20,0,0" Click="MLPSaveButton_Click"/>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="CNNModel">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Mode:" />
+                    <ListBox Name="CNNModeListBox" SelectionMode="Multiple" Height="100" Width="300">
+                        <ListBoxItem Content="xss" />
+                        <ListBoxItem Content="remote_code_execution" />
+                        <ListBoxItem Content="command_injection" />
+                        <ListBoxItem Content="path_disclosure" />
+                        <ListBoxItem Content="xsrf" />
+                        <ListBoxItem Content="sql" />
+                        <ListBoxItem Content="open_redirect" />
+                    </ListBox>
+
+                    <TextBlock Text="Save Model Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="CNNSaveModelPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="CNNBrowseSaveModelPathButton_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Epochs:" Margin="0,10,0,0"/>
+                    <TextBox Name="CNNEpochsTextBox" Text="10"/>
+
+                    <TextBlock Text="Batch Size:" Margin="0,10,0,0"/>
+                    <TextBox Name="CNNBatchSizeTextBox" Text="128"/>
+
+                    <Button x:Name="CNNSaveButton" Content="Save" Margin="0,20,0,0" Click="CNNSaveButton_Click"/>
+                </StackPanel>
+            </TabItem>
+
+            <!--<TabItem Header="Demonstrate">-->
+            <TabItem Header="Demonstrate">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Mode:" />
+                    <ListBox Name="demonstrateListBox" SelectionMode="Multiple" Height="100" Width="200">
+                        <ListBoxItem Content="xss" />
+                        <ListBoxItem Content="remote_code_execution" />
+                        <ListBoxItem Content="command_injection" />
+                        <ListBoxItem Content="path_disclosure" />
+                        <ListBoxItem Content="xsrf" />
+                        <ListBoxItem Content="sql" />
+                        <ListBoxItem Content="open_redirect" />
+                    </ListBox>
+
+                    <TextBlock Text="Samples Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="demonstrateSamplesPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="DemonstrateBrowseSamplesPathButton_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Save Model Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="demonstrateSaveModelPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="DemonstrateBrowseSaveModelPathButton_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Word2Vec Model Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="demonstrateModelPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="DemonstrateBrowseWord2VecModelPathButton_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Save Blocks Visual Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="demonstrateSaveBlocksVisualPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="DemonstrateBrowseSaveBlocksVisualPathButton_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Number Of Example:" Margin="0,10,0,0"/>
+                    <TextBox Name="numberOfExampleTextBox" Text="1"/>
+
+                    <Button x:Name="demonstrateSaveButton" Content="Save" Margin="0,20,0,0" Click="DemonstrateSaveButton_Click"/>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="LSTM Metrics">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Mode:" />
+                    <ListBox Name="LSTMMetricsListBox" SelectionMode="Multiple" Height="100" Width="200">
+                        <ListBoxItem Content="xss" />
+                        <ListBoxItem Content="remote_code_execution" />
+                        <ListBoxItem Content="command_injection" />
+                        <ListBoxItem Content="path_disclosure" />
+                        <ListBoxItem Content="xsrf" />
+                        <ListBoxItem Content="sql" />
+                        <ListBoxItem Content="open_redirect" />
+                    </ListBox>
+
+                    <TextBlock Text="Save Model Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="LSTMMetricsSaveModelPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="LSTMMetricsBrowseSaveModelPathButton_Click"/>
+                    </StackPanel>
+
+                    <Button x:Name="LSTMMetricsSaveButton" Content="Save" Margin="0,20,0,0" Click="LSTMMetricsSaveButton_Click"/>
+
+                    <TextBox Name="LSTMMetricsShowResults" HorizontalAlignment="Stretch" VerticalAlignment="Center" AcceptsReturn="True" TextWrapping="Wrap" />
+
+
+
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="MLP Metrics">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Mode:" />
+                    <ListBox Name="MLPMetricsListBox" SelectionMode="Multiple" Height="100" Width="200">
+                        <ListBoxItem Content="xss" />
+                        <ListBoxItem Content="remote_code_execution" />
+                        <ListBoxItem Content="command_injection" />
+                        <ListBoxItem Content="path_disclosure" />
+                        <ListBoxItem Content="xsrf" />
+                        <ListBoxItem Content="sql" />
+                        <ListBoxItem Content="open_redirect" />
+                    </ListBox>
+
+                    <TextBlock Text="Save Model Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="MLPMetricsSaveModelPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="MLPMetricsBrowseSaveModelPathButton_Click"/>
+                    </StackPanel>
+
+                    <Button x:Name="MLPMetricsSaveButton" Content="Save" Margin="0,20,0,0" Click="MLPMetricsSaveButton_Click"/>
+
+                    <TextBox Name="MLPMetricsShowResults" HorizontalAlignment="Stretch" VerticalAlignment="Center" AcceptsReturn="True" TextWrapping="Wrap" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="CNN Metrics">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Mode:" />
+                    <ListBox Name="CNNMetricsListBox" SelectionMode="Multiple" Height="100" Width="200">
+                        <ListBoxItem Content="xss" />
+                        <ListBoxItem Content="remote_code_execution" />
+                        <ListBoxItem Content="command_injection" />
+                        <ListBoxItem Content="path_disclosure" />
+                        <ListBoxItem Content="xsrf" />
+                        <ListBoxItem Content="sql" />
+                        <ListBoxItem Content="open_redirect" />
+                    </ListBox>
+
+                    <TextBlock Text="Save Model Path:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="CNNMetricsSaveModelPathTextBox" Width="400" IsReadOnly="True"/>
+                        <Button Content="Browse..." Margin="5,0,0,0" Click="CNNMetricsBrowseSaveModelPathButton_Click"/>
+                    </StackPanel>
+
+                    <Button x:Name="CNNMetricsSaveButton" Content="Save" Margin="0,20,0,0" Click="CNNMetricsSaveButton_Click"/>
+
+                    <TextBox Name="CNNMetricsShowResults"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             IsReadOnly="True"
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Analysis">
+                <Grid>
+                    <!-- Define 2 rows and 2 columns -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Top Left Section -->
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <WrapPanel Grid.Row="0" VerticalAlignment="Top" Margin="10">
+                            <ComboBox x:Name="compareComboBox1" Width="100" Height="20" Margin="10">
+                                <ComboBoxItem>LSTM Model</ComboBoxItem>
+                                <ComboBoxItem>MLP Model</ComboBoxItem>
+                                <ComboBoxItem>CNN Model</ComboBoxItem>
+                            </ComboBox>
+
+                            <ComboBox x:Name="compareComboBox2" Width="100" Height="20" Margin="10">
+                                <ComboBoxItem>LSTM Model</ComboBoxItem>
+                                <ComboBoxItem>MLP Model</ComboBoxItem>
+                                <ComboBoxItem>CNN Model</ComboBoxItem>
+                            </ComboBox>
+
+                            <Button x:Name="compareButton" Width="100" Height="20" Content="Compare" Click="CompareButton_Click"/>
+                        </WrapPanel>
+
+                        <!-- Accuracy Plot View -->
+                        <oxy:PlotView x:Name="accuracyPlotView1" Model="{Binding AccuracyPlotModel}" Grid.Row="1"/>
+                    </Grid>
+
+                    <!-- Top Right Section -->
+                    <Grid Grid.Row="0" Grid.Column="1">
+                        <oxy:PlotView x:Name="precisionPlotView1" Model="{Binding PrecisionPlotModel}" />
+                    </Grid>
+
+                    <!-- Bottom Left Section -->
+                    <Grid Grid.Row="1" Grid.Column="0">
+                        <oxy:PlotView x:Name="recallPlotView1" Model="{Binding RecallPlotModel}" />
+                    </Grid>
+
+                    <!-- Bottom Right Section -->
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <oxy:PlotView x:Name="f1_ScorePlotView1" Model="{Binding F1_ScorePlotModel}" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+
+    </Grid>
+
+</Window>

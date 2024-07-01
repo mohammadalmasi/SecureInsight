@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package PythonCorpus;
+
+service PythonCorpusService {
+    rpc Start(StartRequest) returns (stream StartResponse);
+}
+
+message StartRequest {
+    string language = 1;
+    string remote_url = 2;
+    string path = 3;
+}
+
+message StartResponse {
+    bool result = 1;
+    string error_message = 2;
+    string status = 3;
+    float progress = 4;
+}

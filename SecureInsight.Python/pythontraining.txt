@@ -1,0 +1,363 @@
+
+
+import re
+import sys
+import time
+import subprocess
+from io import StringIO 
+
+#remoe some broken code in the corpus
+with open('w2v/pythontraining.txt', 'r', encoding='utf-8') as f:
+    contents = f.read()
+
+contents = contents.replace('\t', '    ')
+
+
+# Use regular expression to remove non-ASCII characters
+#contents = re.sub(r'[^\x00-\x7F]+', '', contents)
+#contents = re.sub(r'[\x00-\x1F\x7F]', '', contents)
+
+#[\x0,\x1,\x2,\x3,\x4,\x5,\x6,\x7,\x8,\x1*,\x1F]
+ 
+
+if 'PositiveSmallIntegerField(\n                choices' in contents:
+    pos = contents.find('PositiveSmallIntegerField(\n                choices')
+    contents = contents[:pos-198] + contents[pos+178:]
+
+if "            raise ImportError,self.__dict__.get('_ppimport_exc_info')[1]" in contents:
+  pos = contents.find("            raise ImportError,self.__dict__.get('_ppimport_exc_info')[1]")
+  length = len("            raise ImportError,self.__dict__.get('_ppimport_exc_info')[1]")
+  contents = contents[:pos] + contents[pos+length+1:]
+
+if "[k]*step+start)" in contents:
+  pos = contents.find("[k]*step+start)")
+  contents = contents[:pos+17] + contents[pos+21:]
+badstring = ["silly_field", "('id', models.AutoField(primary_key=True))"]
+
+while "check_framework.Model2." in contents:
+  pos = contents.find("check_framework.Model2.")
+  area = contents[pos-300:pos+300]
+  start = area.find("class")
+  end = area.find("def")  
+  contents = contents[:pos-300+start] + contents[pos-300+end:]
+
+fromhere = 0
+while "DEFAULT_KMS_KEY_NAME" in contents[fromhere:] and "ENCRYPTION_CONFIG" in contents[fromhere:fromhere+2000]:
+  pos = fromhere + contents[fromhere:].find("DEFAULT_KMS_KEY_NAME")
+  area = contents[pos-1000:pos+1000]
+  start = area[:1000].find("class")
+  if (start == -1):
+    start = area[:1000].find("from")
+  if (start == -1):
+    start = area[:1000].find("import")
+  if (start == -1):
+    start = area[:1000].find("def")
+    
+  end = area[1000:].find("def")
+  if (end == -1):
+    end = area[1000:].find("from")
+  if (end == -1):
+    end = area[1000:].find("import")
+  
+  print("Found it at  " + str(pos))
+#    print(len(contents))
+  if (start > 0 and end > 0):
+    contents = contents[:pos-1000+start] + contents[pos-1000+end:]
+    fromhere = pos-1000+start+end+1
+    print("countinue at " + str(fromhere))
+    print(start)
+    print(end)
+  else:
+    fromhere = pos + 1000
+  
+ 
+fromhere = 0
+while "somepassword" in contents[fromhere:]:
+  pos = fromhere + contents[fromhere:].find("somepassword")
+  area = contents[pos-1000:pos+1000]
+  start = area.find("def")
+  end = area[1000:].find("def")
+  if (end == -1):
+    end = area[1000:].find("from")
+  if (end == -1):
+    end = area[1000:].find("import")
+  if start > 0 and end > 0:
+    contents = contents[:pos-1000+start] + contents[pos+end:]
+    fromhere = pos-1000+start
+
+  else:
+    fromhere = pos + 1
+  
+  
+if "somepassword" in contents and "someuser" in contents and "somehost" in contents:
+  pos = contents.find("somepassword")
+
+for x in badstring:
+  while(x in contents):    
+    pos = contents.find(x)    
+    area = contents[pos-500:pos+1000]            
+    if("db.create_table" in area):
+      contents = contents.replace("('id', models.AutoField(primary_key=True))",
+                                  "('id', models.AutoField(primary_key=False))",1)
+      continue    
+    start = area.find("class")    
+    restarea = area[start:]    
+    end = restarea.find("from") + start
+    end2 = restarea.find("import") + start    
+    if end2 < end:
+      end = end2 
+    if (end > start):
+      contents = contents[:pos-500+start] + contents[pos-500+end:]
+ 
+
+f = open("w2v/pythontraining_edit.txt", "w", encoding='utf-8')
+f.write(contents)
+f.close()    
+
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>1f4e16b8-886b-47fd-9467-0f716889c73e</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>PythonApplication1.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>PythonApplication1</Name>
+    <RootNamespace>PythonApplication1</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="PythonApplication1.py" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>
+
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module _test_odeint_banded ! in 
+    interface  ! in :_test_odeint_banded
+        subroutine getbands(jac) ! in :_test_odeint_banded:banded5x5.f
+            double precision dimension(4,5),intent(out) :: jac
+            double precision dimension(4,5) :: bands
+            common /jac/ bands
+        end subroutine getbands
+        subroutine banded5x5(n,t,y,f) ! in :_test_odeint_banded:banded5x5.f
+            integer, optional,check(len(y)>=n),depend(y) :: n=len(y)
+            double precision :: t
+            double precision dimension(n) :: y
+            double precision dimension(n),depend(n) :: f
+            double precision dimension(4,5) :: bands
+            common /jac/ bands
+        end subroutine banded5x5
+        subroutine banded5x5_jac(n,t,y,ml,mu,jac,nrowpd) ! in :_test_odeint_banded:banded5x5.f
+            integer, optional,check(len(y)>=n),depend(y) :: n=len(y)
+            double precision :: t
+            double precision dimension(n) :: y
+            integer :: ml
+            integer :: mu
+            double precision dimension(nrowpd,n),depend(n) :: jac
+            integer, optional,check(shape(jac,0)==nrowpd),depend(jac) :: nrowpd=shape(jac,0)
+            double precision dimension(4,5) :: bands
+            common /jac/ bands
+        end subroutine banded5x5_jac
+        subroutine banded5x5_bjac(n,t,y,ml,mu,bjac,nrowpd) ! in :_test_odeint_banded:banded5x5.f
+            integer, optional,check(shape(bjac,1)==n),depend(bjac) :: n=shape(bjac,1)
+            double precision :: t
+            double precision dimension(5) :: y
+            integer :: ml
+            integer :: mu
+            double precision dimension(nrowpd,n) :: bjac
+            integer, optional,check(shape(bjac,0)==nrowpd),depend(bjac) :: nrowpd=shape(bjac,0)
+            double precision dimension(4,5) :: bands
+            common /jac/ bands
+        end subroutine banded5x5_bjac
+        subroutine banded5x5_solve(y,nsteps,dt,jt,nst,nfe,nje) ! in :_test_odeint_banded:banded5x5.f
+            double precision dimension(5),intent(inout) :: y
+            integer intent(in) :: nsteps
+            double precision intent(in) :: dt
+            integer intent(in) :: jt
+            integer intent(out) :: nst
+            integer intent(out) :: nfe
+            integer intent(out) :: nje
+            double precision dimension(4,5) :: jacband
+            common /jac/ jacband
+        end subroutine banded5x5_solve
+    end interface 
+end python module _test_odeint_banded
+
+! This file was auto-generated with f2py (version:1.21.0).
+! See http://cens.ioc.ee/projects/f2py2e/
+
+
+! Signatures for f2py-wrappers of FORTRAN LAPACK General Banded Matrix functions.
+!
+
+subroutine <prefix>gbsv(n,kl,ku,nrhs,ab,piv,b,info)
+     ! lub,piv,x,info = gbsv(kl,ku,ab,b,overwrite_ab=0,overwrite_b=0)
+    ! Solve A * X = B
+    ! A = P * L * U
+    ! A is a band matrix of order n with kl subdiagonals and ku superdiagonals
+    ! starting at kl-th row.
+    ! X, B are n-by-nrhs matrices
+ 
+    callstatement {F_INT i=2*kl+ku+1;(*f2py_func)(&n,&kl,&ku,&nrhs,ab,&i,piv,b,&n,&info);for(i=0;i\<n;--piv[i++]);}
+    callprotoargument F_INT*,F_INT*,F_INT*,F_INT*,<ctype>*,F_INT*,F_INT*,<ctype>*,F_INT*,F_INT*
+    integer depend(ab),intent(hide):: n = shape(ab,1)
+    integer intent(in) :: kl
+    integer intent(in) :: ku
+    integer depend(b),intent(hide) :: nrhs = shape(b,1)
+    <ftype> dimension(2*kl+ku+1,n),depend(kl,ku), check(2*kl+ku+1==shape(ab,0)) :: ab
+    integer dimension(n),depend(n),intent(out) :: piv
+    <ftype> dimension(n,nrhs),depend(n),check(shape(ab,1)==shape(b,0)) :: b
+    integer intent(out) :: info
+    intent(in,out,copy,out=x) b
+    intent(in,out,copy,out=lub) ab
+
+end subroutine <prefix>gbsv
+   
+subroutine <prefix>gbtrf(m,n,ab,kl,ku,ldab,ipiv,info)
+    ! in :Band:dgbtrf.f
+    ! lu,ipiv,info = dgbtrf(ab,kl,ku,[m,n,ldab,overwrite_ab])
+    ! Compute  an  LU factorization of a real m-by-n band matrix
+
+    ! threadsafe  ! FIXME: should this be added ?
+
+    callstatement {F_INT i;(*f2py_func)(&m,&n,&kl,&ku,ab,&ldab,ipiv,&info); for(i=0,n=MIN(m,n);i\<n;--ipiv[i++]);}
+    callprotoargument F_INT*,F_INT*,F_INT*,F_INT*,<ctype>*,F_INT*,F_INT*,F_INT*
+
+    ! let the default be a square matrix:
+    integer optional,depend(ab) :: m=shape(ab,1)
+    integer optional,depend(ab) :: n=shape(ab,1)
+    integer :: kl
+    integer :: ku
+
+    <ftype> dimension(ldab,n),intent(in,out,copy,out=lu) :: ab
+    integer optional,check(shape(ab,0)==ldab),depend(ab) :: ldab=max(shape(ab,0),1)
+    integer dimension(MIN(m,n)),depend(m,n),intent(out) :: ipiv
+    integer intent(out):: info
+
+end subroutine <prefix>gbtrf
+
+subroutine <prefix>gbtrs(ab,kl,ku,b,ipiv,trans,n,nrhs,ldab,ldb,info) ! in :Band:dgbtrs.f
+    ! x,info = dgbtrs(ab,kl,ku,b,ipiv,[trans,n,ldab,ldb,overwrite_b])
+    ! solve a system of linear equations A * X = B or A' * X = B
+    ! with a general band matrix A using the  LU  factorization
+    ! computed by DGBTRF
+    !
+    ! TRANS   Specifies the form of the system of equations.
+    !  0  = 'N':  A * X =B  (No transpose)
+    !  1  = 'T':  A'* X = B  (Transpose)
+    !  2  = 'C':  A'* X = B  (Conjugate transpose = Transpose)
+    
+    callstatement {F_INT i;for(i=0;i\<n;++ipiv[i++]);(*f2py_func)((trans>0?(trans==1?"T":"C"):"N"),&n,&kl,&ku,&nrhs,ab,&ldab,ipiv,b,&ldb,&info);for(i=0;i\<n;--ipiv[i++]);}
+    callprotoargument char*,F_INT*,F_INT *,F_INT*,F_INT*,<ctype>*,F_INT*,F_INT*,<ctype>*,F_INT*,F_INT*
+    !character optional:: trans='N'
+    integer optional:: trans=0
+    integer optional,depend(ab) :: n=shape(ab,1)
+    integer :: kl
+    integer :: ku
+    integer intent(hide),depend(b):: nrhs=shape(b,1)
+
+    <ftype> dimension(ldab,n),intent(in) :: ab
+    integer optional,check(shape(ab,0)==ldab),depend(ab) :: ldab=shape(ab,0)
+
+    integer dimension(n),intent(in) :: ipiv
+    <ftype> dimension(ldb,nrhs),intent(in,out,copy,out=x) :: b
+    integer optional,check(shape(b,0)==ldb),depend(b) :: ldb=shape(b,0)
+    !integer optional,check(shape(b,0)==ldb),depend(b) :: ldb=shape(b,0)
+    integer intent(out):: info
+
+end subroutine <prefix>gbtrs
+
+
+cimport cython
+from scipy.linalg.cython_lapack cimport dlartg
+from scipy.linalg.cython_blas cimport drot
+
+import numpy as np
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def givens_elimination(double[:, ::1] S, double[:] v, const double[:] diag):
+    """Zero out a diagonal block of a matrix by series of Givens rotations.
+
+    The matrix has the structure::
+
+        [ S ]
+        [ D ]
+
+    Where S is an upper triangular matrix with shape (n, n) and D is a
+    diagonal matrix with shape (n, n) with elements from `diag`. This function
+    applies Givens rotations to it such that the resulting matrix has zeros
+    in place of D.
+
+    Array `S` will be modified in-place.
+
+    Array `v` of shape (n,) is the part of the full vector with shape (2*n,)::
+
+        [ v ]
+        [ 0 ]
+
+    to which Givens rotations are applied. This array is modified in place,
+    such that on exit it contains the first n components of the above
+    mentioned vector after rotations were applied.
+    """
+    cdef int n = diag.shape[0]
+    cdef int k
+
+    cdef int i, j
+
+    cdef double f, g, r
+    cdef double cs, sn
+    cdef int one = 1
+
+    cdef double [:] diag_row = np.empty(n)
+    cdef double u  # For `v` rotations.
+
+    for i in range(n):
+        if diag[i] == 0:
+            continue
+
+        diag_row[i+1:] = 0
+        diag_row[i] = diag[i]
+        u = 0
+
+        for j in range(i, n):
+            if diag_row[j] != 0:
+                f = S[j, j]
+                g = diag_row[j]
+
+                # Compute cosine and sine of rotation angle.
+                dlartg(&f, &g, &cs, &sn, &r)
+                S[j, j] = r
+                # diag_row[j] is implicitly 0 now.
+
+                # Now rotate the remaining elements in rows.
+                k = n - j - 1
+                if k > 0:
+                    drot(&k, &S[j, j+1], &one, &diag_row[j+1], &one, &cs, &sn)
+
+                # Some custom code for rotating `v`.
+                f = v[j]
+                v[j] = cs * f + sn * u
+                u = -sn * f + cs * u

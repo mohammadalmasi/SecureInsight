@@ -1,0 +1,48 @@
+﻿cd C:\Users\Mohammad\myenv
+Scripts\activate
+cd C:\Workloads\SecureInsight\SecureInsight.Python\grpc_services
+cd C:\Workloads\SecureInsight\SecureInsight.Python
+
+
+
+
+
+---------------------------------------------------
+
+pip install grpcio-tools
+
+ 
+
+  
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. PythonCorpusService.proto
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. PythonTokenizerService.proto
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. PythonMakeWord2VecModelService.proto
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. PythonMakeLSTMModelService.proto
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. PythonMakeMLPModelService.proto
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. PythonMakeCNNModelService.proto
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. PythonDemonstrateService.proto
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. PythonLSTMMetricsAnalysisService.proto
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. PythonMLPMetricsAnalysisService.proto
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. PythonCNNMetricsAnalysisService.proto
+python first_grpc_server.py
+
+
+python second_grpc_server.py
+
+
+
+
+
+<ItemGroup>
+	<Protobuf Include="PythonCorpusService.proto" GrpcServices="Client" />
+	<Protobuf Include="PythonTokenizerService.proto" GrpcServices="Client" />
+    <Protobuf Include="PythonMakeWord2VecModelService.proto" GrpcServices="Client" />
+	<Protobuf Include="PythonMakeLSTMModelService.proto" GrpcServices="Client" />
+    <Protobuf Include="PythonMakeMLPModelService.proto" GrpcServices="Client" />
+	<Protobuf Include="PythonMakeCNNModelService.proto" GrpcServices="Client" />
+    <Protobuf Include="PythonDemonstrateService.proto" GrpcServices="Client" />
+	<Protobuf Include="PythonLSTMMetricsAnalysisService.proto" GrpcServices="Client" />
+	<Protobuf Include="PythonMLPMetricsAnalysisService.proto" GrpcServices="Client" />
+	<Protobuf Include="PythonCNNMetricsAnalysisService.proto" GrpcServices="Client" />
+</ItemGroup>
+

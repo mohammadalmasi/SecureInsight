@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package PythonMakeLSTMModel;
+
+service PythonMakeLSTMModelService {
+    rpc Start(StartRequest) returns (stream StartResponse);
+}
+
+message StartRequest {
+    repeated string modes = 1;
+    string samples_path = 2;
+    string save_model_path = 3;
+    double dropout = 4;
+    int32 neurons = 5;
+    int32 epochs = 6;
+    int32 batch_size = 7;
+    int32 vector_size = 8;
+    int32 iteration = 9;
+    int32 min_count = 10;
+}
+
+message StartResponse {
+    bool result = 1;
+    string error_message = 2;
+    string status = 3;
+}

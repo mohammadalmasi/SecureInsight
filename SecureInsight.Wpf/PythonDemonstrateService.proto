@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package PythonDemonstrate;
+
+service PythonDemonstrateService {
+    rpc Start(StartRequest) returns (stream StartResponse);
+}
+
+message StartRequest {
+    repeated string modes = 1;
+    string samples_path = 2;
+    string save_model_path = 3;
+    int32 vector_size = 4;
+    int32 iteration = 5;
+    int32 min_count = 6;
+    string save_blocks_visual_path = 7;
+    int32 number_of_example = 8;
+}
+
+message StartResponse {
+    bool result = 1;
+    string error_message = 2;
+    string status = 3;
+}

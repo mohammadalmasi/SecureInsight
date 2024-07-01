@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package PythonTokenizer;
+
+service PythonTokenizerService {
+    rpc Start(StartRequest) returns (stream StartResponse);
+}
+
+message StartRequest {
+    string language = 1;
+    repeated string input_paths = 2;
+    int32 chunk_size = 3;
+}
+
+message StartResponse {
+    bool result = 1;
+    string error_message = 2;
+    string status = 3;
+    float progress = 4;
+}

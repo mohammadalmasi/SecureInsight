@@ -1,0 +1,73 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>91de7b1b-e4f4-4207-a224-e05624066386</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>module1.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>SecureInsight.Python</Name>
+    <RootNamespace>SecureInsight.Python</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="grpc_services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="grpc_services\PythonCNNMetricsAnalysisService.proto" />
+    <Content Include="grpc_services\PythonCorpusService.proto" />
+    <Content Include="grpc_services\PythonDemonstrateService.proto" />
+    <Content Include="grpc_services\PythonLSTMMetricsAnalysisService.proto" />
+    <Content Include="grpc_services\PythonMakeCNNModelService.proto" />
+    <Content Include="grpc_services\PythonMakeLSTMModelService.proto" />
+    <Content Include="grpc_services\PythonMakeMLPModelService.proto" />
+    <Content Include="grpc_services\PythonMakeWord2VecModelService.proto" />
+    <Content Include="grpc_services\PythonMLPMetricsAnalysisService.proto" />
+    <Content Include="grpc_services\PythonTokenizerService.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="cnn_metrics_analysis.py" />
+    <Compile Include="corpus.py" />
+    <Compile Include="database.py" />
+    <Compile Include="demonstrate.py" />
+    <Compile Include="download_manager.py" />
+    <Compile Include="GitZipDownloader.py" />
+    <Compile Include="grpc_services\first_grpc_server.py" />
+    <Compile Include="grpc_services\second_grpc_server.py" />
+    <Compile Include="highlighted_excepthook.py" />
+    <Compile Include="lstm_metrics_analysis.py" />
+    <Compile Include="make_cnn_model.py" />
+    <Compile Include="make_lstm_model.py" />
+    <Compile Include="make_mlp_model.py" />
+    <Compile Include="make_word2vec_model.py" />
+    <Compile Include="mlp_metrics_analysis.py" />
+    <Compile Include="csharp_make_word2vec_model.py" />
+    <Compile Include="module1.py" />
+    <Compile Include="myutils.py" />
+    <Compile Include="file_splitter.py" />
+    <Compile Include="test.py" />
+    <Compile Include="tokenizer.py" />
+    <Compile Include="w2v_cleancorpus.py" />
+    <Compile Include="w2v_pythoncorpus.py" />
+    <Compile Include="w2v_tokenize.py" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>

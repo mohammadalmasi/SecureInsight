@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package PythonMakeWord2VecModel;
+
+service PythonMakeWord2VecModelService {
+    rpc Start(StartRequest) returns (stream StartResponse);
+}
+
+message StartRequest {
+    string tokenized_data_path = 1;
+    string model_path = 2;
+    repeated int32 vector_size = 3;
+    repeated int32 iterations = 4;
+    repeated int32 min_count = 5;
+    int32 workers = 6;
+    int32 tokenize_lanquage = 7;
+}
+
+message StartResponse {
+    bool result = 1;
+    string error_message = 2;
+    string status = 3;
+}
